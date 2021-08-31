@@ -14,9 +14,18 @@ namespace hexkeytowif
             int initialByte = 0x80;
             Console.WriteLine("Insert the private key as hex:");
             string hexKeyOG = Console.ReadLine();
+            int hexKeyOGInt = Convert.ToInt32(hexKeyOG);
             Console.WriteLine("Performing conversion...");
+
             string hexKeyStepOne = initialByte + hexKeyOG;
-            Console.WriteLine(hexKeyStepOne);
+            
+            Console.WriteLine("Key with 0x80 byte added: " + hexKeyStepOne);
+            Console.ReadKey();
+
+            int hexKeyStepOneInt = Convert.ToInt32(hexKeyStepOne);
+            string hexKeyStepTwo = (sha256_hash(hexKeyStepOne));
+
+            Console.WriteLine("First SHA hashed key: " + hexKeyStepTwo);
             Console.ReadKey();
             //string hexKeyStepTwo = //SHA HASH STEP ONE
             //string hexKeyStepThree = //SHA HASH STEP TWO
