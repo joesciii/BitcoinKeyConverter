@@ -16,7 +16,7 @@ namespace hexkeytowif
         {
             ConsoleKeyInfo cki1;
             StringBuilder forFile = new StringBuilder();
-            Console.WriteLine("ENSURE YOU ARE RUNNING AS ADMINISTRATOR IF YOU WANT FILE WRITING PRIVELIGES! \r\n");
+            Console.WriteLine("This program will convert hex format private keys to WIF format keys. \r\n");
             Console.WriteLine("Do you want converted keys written to a file on the desktop? (y/n)");            
             cki1 = Console.ReadKey();
             Console.Clear();
