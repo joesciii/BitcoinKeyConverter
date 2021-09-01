@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
-
+using System.IO;
 
 namespace hexkeytowif
 {
@@ -15,6 +15,7 @@ namespace hexkeytowif
         static void Main(string[] args)
         {
             ConsoleKeyInfo cki1;
+            StringBuilder forFile = new StringBuilder();
             Console.WriteLine("ENSURE YOU ARE RUNNING AS ADMINISTRATOR IF YOU WANT FILE WRITING PRIVELIGES! \r\n");
             Console.WriteLine("Do you want converted keys written to a file on the desktop? (y/n)");            
             cki1 = Console.ReadKey();
@@ -40,7 +41,7 @@ namespace hexkeytowif
                 byte[] base58EncodedPrelim = StringToByteArray(hexHash1PlusSubstring);
                 string base58Encoded = Base58Encoding.Encode(base58EncodedPrelim);
 
-                StringBuilder forFile = new StringBuilder();
+
                 forFile.AppendLine(base58Encoded);
                 Console.WriteLine("");
                 Console.WriteLine("Final WIF Format: " + base58Encoded);
@@ -56,8 +57,10 @@ namespace hexkeytowif
                 else if(cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.Y)
                 {
 
-                    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                    System.IO.File.WriteAllText(desktopPath, forFile.ToString());
+                    string filePath = Path.Combine(
+                       Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                      "BITCOIN_WIF_KEYS.txt");
+                    System.IO.File.WriteAllText(filePath, forFile.ToString());
                     break;
                 }
                 else if(cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.N)
