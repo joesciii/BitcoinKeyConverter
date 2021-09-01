@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 
 namespace hexkeytowif
 {
-    public static class Base58Encodings
+    public static class Base58Encoding
     {
         public const int CheckSumSizeInBytes = 4;
 
@@ -40,7 +40,7 @@ namespace hexkeytowif
 
         public static string Encode(byte[] data)
         {
-            Contract.Requires<ArgumentNullException>(data != null);
+            Contract.Requires(data != null);
             Contract.Ensures(Contract.Result<string>() != null);
 
             // Decode byte[] to BigInteger
