@@ -14,43 +14,61 @@ namespace hexkeytowif
     {
         static void Main(string[] args)
         {
-            int initialByte = 80;
-            Console.WriteLine("Insert the private key as hex:");
-            string hexKeyOG = Console.ReadLine();
+            ConsoleKeyInfo cki1;
+            Console.WriteLine("ENSURE YOU ARE RUNNING AS ADMINISTRATOR IF YOU WANT FILE WRITING PRIVELIGES! \r\n");
+            Console.WriteLine("Do you want converted keys written to a file on the desktop? (y/n)");            
+            cki1 = Console.ReadKey();
+            Console.Clear();
+            //runs forever for bulk changing of keys
+            while (true)
+            {
+                int initialByte = 80;
+                Console.WriteLine("Insert the private key as hex:");
 
-            Console.WriteLine("Performing conversion...");
+                string hexKeyOG = Console.ReadLine();
 
-            string hexKeyStepOne = initialByte + hexKeyOG;
-            
-            Console.WriteLine("Key with 0x80 byte added: " + hexKeyStepOne);
-            Console.ReadKey();
+                string hexKeyStepOne = initialByte + hexKeyOG;
+                //Console.WriteLine("Key with 0x80 byte added: " + hexKeyStepOne);
+                string hexKeyStepTwo = (sha256_hash(hexKeyStepOne));
+                //Console.WriteLine("First SHA hashed key: " + hexKeyStepTwo);
+                string hexKeyStepThree = (sha256_hash(hexKeyStepTwo));
+                //Console.WriteLine("Second SHA hashed key: " + hexKeyStepThree);
+                string hexKeySubstring = hexKeyStepThree.Substring(0, 8);
+                //Console.WriteLine("First 4 bytes of 4 from second hashing: " + hexKeySubstring);
+                string hexHash1PlusSubstring = hexKeyStepOne + hexKeySubstring;
+                //Console.WriteLine("First SHA hash with 4 bytes of 4 appended: " + hexHash1PlusSubstring);
+                byte[] base58EncodedPrelim = StringToByteArray(hexHash1PlusSubstring);
+                string base58Encoded = Base58Encoding.Encode(base58EncodedPrelim);
 
-            string hexKeyStepTwo = (sha256_hash(hexKeyStepOne));
+                StringBuilder forFile = new StringBuilder();
+                forFile.AppendLine(base58Encoded);
+                Console.WriteLine("");
+                Console.WriteLine("Final WIF Format: " + base58Encoded);
+                Console.WriteLine("");
+                Console.WriteLine("Press ENTER to continue or ESC to close.");
 
-            Console.WriteLine("First SHA hashed key: " + hexKeyStepTwo);
-            Console.ReadKey();
+                ConsoleKeyInfo cki2;
+                cki2 = Console.ReadKey();
+                if(cki2.Key == ConsoleKey.Enter)
+                {
+                    Console.Clear();
+                }
+                else if(cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.Y)
+                {
 
-            string hexKeyStepThree = (sha256_hash(hexKeyStepTwo));
-
-            Console.WriteLine("Second SHA hashed key: " + hexKeyStepThree);
-            Console.ReadKey();
-
-            string hexKeySubstring = hexKeyStepThree.Substring(0, 8);
-
-            Console.WriteLine("First 4 bytes of 4 from second hashing: " + hexKeySubstring);
-            Console.ReadKey();
-
-            string hexHash1PlusSubstring = hexKeyStepOne + hexKeySubstring;
-
-            Console.WriteLine("First SHA hash with 4 bytes of 4 appended: " + hexHash1PlusSubstring);
-            Console.ReadKey();
-
-            byte[] base58EncodedPrelim = StringToByteArray(hexHash1PlusSubstring);
-            string base58Encoded = Base58Encoding.Encode(base58EncodedPrelim);
-
-            Console.WriteLine("Final WIF Format: " + base58Encoded);
-            Console.ReadKey();
-
+                    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                    System.IO.File.WriteAllText(desktopPath, forFile.ToString());
+                    break;
+                }
+                else if(cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.N)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Clear();
+                }
+            }
         }
 
         public static byte[] StringToByteArray(String hex)
