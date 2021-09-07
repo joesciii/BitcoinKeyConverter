@@ -7,7 +7,7 @@ No error handling so beware, input data must be exactly as expected. I wrote it 
 
 I'll probably fix it up and clean the code if and when I get time.
 
-Built version here:
+Download the built version here:
 https://github.com/joesciii/BitcoinKeyConverter/releases/tag/v0.1
 
 
