@@ -62,9 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayHelpers.cs" />
-    <Compile Include="Base58Encoding.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="B58ExtrasUnused.cs" />
+    <Compile Include="ProgramMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

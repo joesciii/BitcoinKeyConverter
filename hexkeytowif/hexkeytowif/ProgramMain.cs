@@ -24,22 +24,29 @@ namespace hexkeytowif
             while (true)
             {
                 int initialByte = 80;
-                Console.WriteLine("Insert the private key as hex:");
+                initialInput:  Console.WriteLine("Insert the private key as hex:");
 
                 string hexKeyOG = Console.ReadLine();
 
+                if(hexKeyOG.Length != 64)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Your input was incorrect. \r\nThis program takes 64 character hex format bitcoin keys only.\r\n");
+                    goto initialInput;
+                }
+
                 string hexKeyStepOne = initialByte + hexKeyOG;
                 //Console.WriteLine("Key with 0x80 byte added: " + hexKeyStepOne);
-                string hexKeyStepTwo = (sha256_hash(hexKeyStepOne));
+                string hexKeyStepTwo = (SHA256Hash(hexKeyStepOne));
                 //Console.WriteLine("First SHA hashed key: " + hexKeyStepTwo);
-                string hexKeyStepThree = (sha256_hash(hexKeyStepTwo));
+                string hexKeyStepThree = (SHA256Hash(hexKeyStepTwo));
                 //Console.WriteLine("Second SHA hashed key: " + hexKeyStepThree);
                 string hexKeySubstring = hexKeyStepThree.Substring(0, 8);
                 //Console.WriteLine("First 4 bytes of 4 from second hashing: " + hexKeySubstring);
                 string hexHash1PlusSubstring = hexKeyStepOne + hexKeySubstring;
                 //Console.WriteLine("First SHA hash with 4 bytes of 4 appended: " + hexHash1PlusSubstring);
-                byte[] base58EncodedPrelim = StringToByteArray(hexHash1PlusSubstring);
-                string base58Encoded = Base58Encoding.Encode(base58EncodedPrelim);
+                byte[] base58EncodedPrelim = StringToBytes(hexHash1PlusSubstring);
+                string base58Encoded = Base58Encode(base58EncodedPrelim);
 
 
                 forFile.AppendLine(base58Encoded);
@@ -74,28 +81,60 @@ namespace hexkeytowif
             }
         }
 
-        public static byte[] StringToByteArray(String hex)
+        public static byte[] StringToBytes(String hex)
         {
             int NumberChars = hex.Length;
-            byte[] bytes = new byte[NumberChars / 2];
+            byte[] bytes = new byte[hex.Length / 2];
             for (int i = 0; i < NumberChars; i += 2)
                 bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
             return bytes;
         }
 
-        public static String sha256_hash(String value)
+        public static String SHA256Hash(String value)
         {
             StringBuilder Sb = new StringBuilder();
 
             using (SHA256 hash = SHA256Managed.Create())
             {
-                Byte[] result = hash.ComputeHash(StringToByteArray(value));
+                Byte[] result = hash.ComputeHash(StringToBytes(value));
 
                 foreach (Byte b in result)
                     Sb.Append(b.ToString("x2"));
             }
 
             return Sb.ToString();
+        }
+
+        
+        public static string Base58Encode(byte[] data)
+        {
+            Contract.Requires(data != null);
+            Contract.Ensures(Contract.Result<string>() != null);
+
+            string Digits = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+            // Decode byte[] to BigInteger
+            BigInteger intData = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                intData = intData * 256 + data[i];
+            }
+
+            // Encode BigInteger to Base58 string
+            string result = "";
+            while (intData > 0)
+            {
+                int remainder = (int)(intData % 58);
+                intData /= 58;
+                result = Digits[remainder] + result;
+            }
+
+            // Append `1` for each leading 0 byte
+            for (int i = 0; i < data.Length && data[i] == 0; i++)
+            {
+                result = '1' + result;
+            }
+            return result;
         }
 
     }
