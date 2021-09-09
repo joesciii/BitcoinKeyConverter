@@ -1,13 +1,29 @@
 # BitcoinKeyConverter
+
 Converts hex format bitcoin private keys to WIF format safely, offline. Option to dump converted keys to file.
-
-Uses https://gist.github.com/CodesInChaos/3175971 for base58 encoding.
-
 No real error handling so beware, only 64 character hex format bitcoin keys are taken. I wrote it quickly for myself so I could parse hundreds of keys safely offline instead of using a website like https://gobittest.appspot.com/PrivateKey. 
 
+Code is given as experimental.
 
-Download the built version here:
-https://github.com/joesciii/BitcoinKeyConverter/releases/tag/v0.11
+## Dependencies
+
+*.NET 4.6.1 (Probably bundled with your Windows 10)
+
+## How to use
+
+Download the built version from the latest release here https://github.com/joesciii/BitcoinKeyConverter/releases/tag/v0.11 (or clone and build yourself). Instructions are given within the program. As above, only 64 character hex format private keys are accepted.
+
+## Version History
+
+* 0.11
+    * Bug fix, basic input sense check added.
+* 0.1
+    * Base version
+
+## Acknowledgements
+
+* [CodesInChaos](https://gist.github.com/CodesInChaos/3175971) - Succint Base58 Encoding snippet
+
 
 
 
