@@ -17,24 +17,65 @@ namespace hexkeytowif
             ConsoleKeyInfo cki1;
             StringBuilder forFile = new StringBuilder();
             Console.WriteLine("This program will convert hex format private keys to WIF format keys. \r\n");
-            Console.WriteLine("Do you want converted keys written to a file on the desktop? (y/n)");            
+            Console.WriteLine("Do you want converted keys written to a file on the desktop? (y/n)");
             cki1 = Console.ReadKey();
             Console.Clear();
-            //runs forever for bulk changing of keys
+
             while (true)
             {
-                int initialByte = 80;
-                initialInput:  Console.WriteLine("Insert the private key as hex:");
 
-                string hexKeyOG = Console.ReadLine();
+                string base58Encoded = MainHexToWif();
 
-                if(hexKeyOG.Length != 64)
+                forFile.AppendLine(base58Encoded);
+                Console.WriteLine("");
+                Console.WriteLine("Final WIF Format: " + base58Encoded);
+                Console.WriteLine("");
+                Console.WriteLine("Press ENTER to continue or ESC to close.");
+
+                ConsoleKeyInfo cki2;
+                cki2 = Console.ReadKey();
+                if (cki2.Key == ConsoleKey.Enter)
                 {
                     Console.Clear();
-                    Console.WriteLine("Your input was incorrect. \r\nThis program takes 64 character hex format bitcoin keys only.\r\n");
-                    goto initialInput;
                 }
+                else if (cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.Y)
+                {
 
+                    string filePath = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                        "BITCOIN_WIF_KEYS.txt");
+                    System.IO.File.WriteAllText(filePath, forFile.ToString());
+                    break;
+                }
+                else if (cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.N)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Clear();
+                }
+            }           
+        }
+        
+        
+
+        public static String MainHexToWif()
+        {
+            int initialByte = 80;
+            initialInput: Console.WriteLine("Insert the private key as hex:");
+
+            string hexKeyOG = Console.ReadLine();
+
+            if (hexKeyOG.Length != 64)
+            {
+                Console.Clear();
+                Console.WriteLine("Your input was incorrect. \r\nThis program takes 64 character hex format bitcoin keys only.\r\n");
+                goto initialInput;
+            }
+
+            try
+            {
                 string hexKeyStepOne = initialByte + hexKeyOG;
                 //Console.WriteLine("Key with 0x80 byte added: " + hexKeyStepOne);
                 string hexKeyStepTwo = (SHA256Hash(hexKeyStepOne));
@@ -47,38 +88,19 @@ namespace hexkeytowif
                 //Console.WriteLine("First SHA hash with 4 bytes of 4 appended: " + hexHash1PlusSubstring);
                 byte[] base58EncodedPrelim = StringToBytes(hexHash1PlusSubstring);
                 string base58Encoded = Base58Encode(base58EncodedPrelim);
-
-
-                forFile.AppendLine(base58Encoded);
-                Console.WriteLine("");
-                Console.WriteLine("Final WIF Format: " + base58Encoded);
-                Console.WriteLine("");
-                Console.WriteLine("Press ENTER to continue or ESC to close.");
-
-                ConsoleKeyInfo cki2;
-                cki2 = Console.ReadKey();
-                if(cki2.Key == ConsoleKey.Enter)
-                {
-                    Console.Clear();
-                }
-                else if(cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.Y)
-                {
-
-                    string filePath = Path.Combine(
-                       Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                      "BITCOIN_WIF_KEYS.txt");
-                    System.IO.File.WriteAllText(filePath, forFile.ToString());
-                    break;
-                }
-                else if(cki2.Key == ConsoleKey.Escape && cki1.Key == ConsoleKey.N)
-                {
-                    break;
-                }
-                else
-                {
-                    Console.Clear();
-                }
+                return base58Encoded;
             }
+            catch
+            {
+                Console.Clear();
+                Console.WriteLine("Something went wrong during conversion. Are you sure you entered a 64 character HEX format bitcoin private key?");
+                Console.WriteLine("Press ENTER to continue...");
+                Console.ReadKey();
+                Console.Clear();
+            }
+            string invalidKey = "---INVALID---";
+            return invalidKey;
+
         }
 
         public static byte[] StringToBytes(String hex)
