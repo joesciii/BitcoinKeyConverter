@@ -15,6 +15,8 @@ Download the built version from the latest release here https://github.com/joesc
 
 ## Version History
 
+* 0.12
+    * Refactored for potential future functionality. More basic sense checking.
 * 0.11
     * Basic input sense check added. Cleaned a bit.
 * 0.1
