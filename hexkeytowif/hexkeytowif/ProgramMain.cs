@@ -94,11 +94,8 @@ namespace hexkeytowif
             {
                 Console.Clear();
                 Console.WriteLine("Something went wrong during conversion. Are you sure you entered a 64 character HEX format bitcoin private key?");
-                Console.WriteLine("Press ENTER to continue...");
-                Console.ReadKey();
-                Console.Clear();
             }
-            string invalidKey = "---INVALID---";
+            string invalidKey = "INVALID KEY";
             return invalidKey;
 
         }
