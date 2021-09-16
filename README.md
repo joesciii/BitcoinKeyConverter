@@ -11,7 +11,7 @@ Code is given as experimental.
 
 ## How to use
 
-Download the built version from the latest release here https://github.com/joesciii/BitcoinKeyConverter/releases/tag/v0.11 (or clone and build yourself). Instructions are given within the program. As above, only 64 character hex format private keys are accepted.
+Download the built version from the latest release here https://github.com/joesciii/BitcoinKeyConverter/releases/tag/v0.12 (or clone and build yourself). Instructions are given within the program. As above, only 64 character hex format private keys are accepted.
 
 ## Version History
 
