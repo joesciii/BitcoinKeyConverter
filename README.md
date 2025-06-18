@@ -7,6 +7,8 @@ No real error handling, only 64 character hex format bitcoin keys are taken. I w
 
 *.NET 4.8
 
+Releases prior v0.13 utilise .NET 4.6.1
+
 ## How to use
 
 Instructions are given within the program. Only 64 character hex format private keys are accepted.
