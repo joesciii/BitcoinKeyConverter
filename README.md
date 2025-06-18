@@ -5,9 +5,9 @@ No real error handling, only 64 character hex format bitcoin keys are taken. I w
 
 ## Dependencies
 
-*.NET 4.8
+*.NET Framework 4.8
 
-Releases prior v0.13 utilise .NET 4.6.1
+Releases prior v0.13 utilise .NET Framework 4.6.1
 
 ## How to use
 
